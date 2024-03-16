@@ -1,0 +1,33 @@
+{% extends 'baseTemplate.html' %}
+{% block content %}
+    <div class="container py-4 my-4 mx-auto d-flex flex-column">
+    <div class="header">
+        <div class="row r1">
+            <div class="col-md-9 abc">
+                <h1>{{ product.prod_name }}</h1>
+                <h3>{{ product.prod_article }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="container-body mt-4">
+        <div class="row r3">
+            <div class="col-md-5 p-0 klo">
+                <ul class="list-unstyled">
+                    <li class="mb-2">Артикул: {{ product.prod_article }}</li>
+                    <li class="mb-2">Категория товара: {{ product.prod_category }}</li>
+                    <li class="mb-2">Описание: {{ product.prod_description}}</li>
+                    <li class="mb-2">Цена: {{ product.prod_price }} руб.</li>
+                </ul>
+            </div>
+            <div class="col-md-7"> <img src="https://m.media-amazon.com/images/I/61+a3iBGiUL._AC_UY1000_.jpg" width="90%" height="95%"> </div>
+        </div>
+    </div>
+    <div class="footer d-flex flex-column mt-5">
+        <div class="row r3">
+            <div class="col-md-2 myt "><a class="btn btn-dark">Отзывы</a></div>
+            <div class="col-md-2 mio offset-md-4"><a class="btn btn-dark">В корзину</a></div>
+            <div class="col-md-2 myt "><button type="button" class="btn btn-danger"><a>Купить сейяас</a></button></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
