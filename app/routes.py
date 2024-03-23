@@ -1,8 +1,11 @@
 import flask
 from app import flask_app
 from flask import render_template, redirect, url_for, session
+from flask_mail import Message
 from app.forms import *
 from models import Role,User,Product
+from . import mail
+import os.path
 
 @flask_app.route("/")
 @flask_app.route("/index")
@@ -41,7 +44,20 @@ def showProfile():
         return render_template("profile.html",user = user,auth = session.get('auth'))
     else:
         flask.abort(403)
-
+@flask_app.route('/confirm/<user_email>')
+def confirm(user_email):
+    user = User.query.filter_by(user_email=user_email).first()
+    send_mail("ma_spiridonova@student.mpgu.edu", "User wants to become a partner", 'send_mail', user=user)
+    return redirect(url_for("showProfile"))
+def send_mail(to, subject, template, **kwargs):
+    msg = Message(subject,
+                  sender=flask_app.config['MAIL_USERNAME'],
+                  recipients=[to])
+    if os.path.isfile('app/templates/'+template + '.html'):
+        msg.html = render_template(template + ".html", **kwargs)
+    if os.path.isfile('app/templates/'+template + ".txt"):
+        msg.body = render_template(template + ".txt", **kwargs)
+    mail.send(msg)
 @flask_app.route('/registration',methods=['GET','POST'])
 def registrForm():
     if not session.get('auth'):
@@ -73,6 +89,9 @@ def loginForm():
         return render_template('loginForm.html', form=form)
     else:
         return redirect(url_for('showProfile'))
+
+
+
 
 @flask_app.route('/logout')
 def logout():
