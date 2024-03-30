@@ -182,7 +182,7 @@
             <button type="button" class="btn btn-dark btn-sm btn-block">
               Редактировать
             </button>
-              <a type="button" onclick="alert('С Вами свяжутся по указанному в Вашем профиле Email')" class="btn btn-danger btn-sm btn-block" href="{{ url_for('confirm',user_email=user.email) }}">
+              <a type="button" onclick="alert('С Вами свяжутся по указанному в Вашем профиле Email')" class="btn btn-danger btn-sm btn-block" href="{{ url_for('main.confirm',user_email=user.email) }}">
                   Хочу сотрудничать
               </a>
           </div>
