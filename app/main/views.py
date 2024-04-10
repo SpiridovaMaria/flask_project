@@ -1,7 +1,7 @@
 import flask
 from flask import render_template, redirect, url_for, session
 from app.main.forms import *
-from app.models import User,Product
+from app.models import User,Product,Role
 import os.path
 from . import main
 from .. import mail
@@ -44,7 +44,7 @@ def showProfile():
 def confirm(user_email):
     user = User.query.filter_by(user_email=user_email).first()
     send_mail("ma_spiridonova@student.mpgu.edu", "User wants to become a partner", 'send_mail', user=user)
-    return redirect(url_for("showProfile"))
+    return redirect(url_for("main.showProfile"))
 def send_mail(to, subject, template, **kwargs):
     msg = Message(subject,
                   sender=flask_app.config['MAIL_USERNAME'],
@@ -64,10 +64,10 @@ def registrForm():
             session['surname'] = form.surname.data
             session['gender'] = form.gender.data
             session['email'] = form.email.data
-            return redirect(url_for('showProfile'))
+            return redirect(url_for('main.showProfile'))
         return render_template('formsTemplate.html', form=form)
     else:
-        return redirect(url_for('showProfile'))
+        return redirect(url_for('main.showProfile'))
 
 
 @main.route('/login',methods=['GET','POST'])
@@ -81,7 +81,7 @@ def loginForm():
                 session['auth'] = True
             else:
                 session['auth'] = False
-            return redirect(url_for('showProfile'))
+            return redirect(url_for('main.showProfile'))
         return render_template('loginForm.html', form=form)
     else:
         return redirect(url_for('showProfile'))

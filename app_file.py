@@ -1,5 +1,5 @@
 from app.models import User,Role,Product
-from app import create_app,db
+from app import create_app, db
 from flask_migrate import Migrate
 import unittest
 

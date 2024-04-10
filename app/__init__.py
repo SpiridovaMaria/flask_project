@@ -4,12 +4,11 @@ from flask_bootstrap import Bootstrap5
 from flask_mail import Mail
 from config import config
 
-
 bootstrap = Bootstrap5()
 db = SQLAlchemy()
 mail = Mail()
 
-def create_app(config_name='default'):
+def create_app(config_name="default"):
     flask_app = Flask(__name__)
     flask_app.config.from_object(config[config_name])
     config[config_name].init_app(flask_app)
@@ -22,6 +21,3 @@ def create_app(config_name='default'):
 
     return flask_app
 
-flask_app = Flask(__name__)
-
-from app.main import views
