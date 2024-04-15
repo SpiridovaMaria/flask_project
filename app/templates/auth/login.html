@@ -8,10 +8,20 @@
     {{ bootstrap.load_js() }}
     <link href="{{url_for('static', filename = 'style_form.css')}}" rel="stylesheet">
 </head>
-<body class="d-flex justify-content-center" style="background: #ffc0cb">
+<body style="background: #ffc0cb; margin:auto">
+<div class="d-flex justify-content-center">
         <form class="col-lg-3 my-form mt-3" method="post">
+            <row>
             <legend class="text-center">Авторизация</legend>
+                {% with messages = get_flashed_messages() %}
+               {% for msg in get_flashed_messages() %}
+                    <div style="color:red">{{msg}}</div>
+                {% endfor %}
+            {% endwith %}
             {{ render_form(form) }}
+                <a type='button' class="btn btn-dark my-2" href="{{ url_for('auth.registration') }}">Зарегистрироваться</a>
+           </row>
         </form>
+</div>
 </body>
 </html>
