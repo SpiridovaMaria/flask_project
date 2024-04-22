@@ -36,23 +36,11 @@ def edit_product_panel(id_product):
 @login_required
 def showProfile():
     user = current_user
-    user={'name':user.user_name, 'surname':user.user_surname, 'gender':user.user_gender,'email':user.user_email}
-    return render_template("profile.html",user = user,auth = session.get('auth'))
-@main.route('/confirm/<user_email>')
-def confirm(user_email):
-    user = User.query.filter_by(user_email=user_email).first()
-    send_mail("ma_spiridonova@student.mpgu.edu", "User wants to become a partner", 'send_mail', user=user)
-    return redirect(url_for("main.showProfile"))
-def send_mail(to, subject, template, **kwargs):
-    msg = Message(subject,
-                  sender=main.config['MAIL_USERNAME'],
-                  recipients=[to])
-    if os.path.isfile('app/templates/'+template + '.html'):
-        msg.html = render_template(template + ".html", **kwargs)
-    if os.path.isfile('app/templates/'+template + ".txt"):
-        msg.body = render_template(template + ".txt", **kwargs)
-    mail.send(msg)
-
+    if user.confirmed:
+        user={'name':user.user_name, 'surname':user.user_surname, 'gender':user.user_gender,'email':user.user_email}
+        return render_template("profile.html",user = user,auth = session.get('auth'))
+    else:
+        return redirect(url_for('auth.unconfirmed'))
 @main.route("/secret")
 @login_required
 def secret():
