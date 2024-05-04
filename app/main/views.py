@@ -1,11 +1,9 @@
 import flask
 from flask import render_template, redirect, url_for, session
-from app.models import User,Product,Role
-import os.path
+from app.models import User,Product,Role, Permission
 from . import main
-from .. import mail
-from flask_mail import Message
 from flask_login import login_required, current_user
+from ..decorators import admin_required, permission_required
 
 
 @main.route("/")
@@ -36,12 +34,21 @@ def edit_product_panel(id_product):
 @login_required
 def showProfile():
     user = current_user
+    print(user.role_id)
     if user.confirmed:
         user={'name':user.user_name, 'surname':user.user_surname, 'gender':user.user_gender,'email':user.user_email}
-        return render_template("profile.html",user = user,auth = session.get('auth'))
+        return render_template("profile.html", user=user, auth=session.get('auth'))
     else:
         return redirect(url_for('auth.unconfirmed'))
-@main.route("/secret")
+
+@main.route("/admin")
 @login_required
-def secret():
-    return "Only for loginned users"
+@admin_required
+def admin_panel():
+    return 'Admin Panel'
+
+@main.route("/moderate")
+@login_required
+@permission_required(Permission.MODERATE)
+def moderator_panel():
+    return 'Moderator Panel'

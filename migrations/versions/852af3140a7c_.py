@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 782b82b6c6b0
-Revises: 
-Create Date: 2024-04-15 13:32:26.155376
+Revision ID: 852af3140a7c
+Revises: bdc8c1eb8728
+Create Date: 2024-05-03 21:53:48.020868
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '782b82b6c6b0'
-down_revision = None
+revision = '852af3140a7c'
+down_revision = 'bdc8c1eb8728'
 branch_labels = None
 depends_on = None
 
@@ -30,9 +30,14 @@ def upgrade():
     op.create_table('roles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=True),
+    sa.Column('default', sa.Boolean(), nullable=True),
+    sa.Column('permissions', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
+    with op.batch_alter_table('roles', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_roles_default'), ['default'], unique=False)
+
     op.create_table('users',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('user_surname', sa.String(length=50), nullable=True),
@@ -41,6 +46,7 @@ def upgrade():
     sa.Column('user_email', sa.String(length=64), nullable=True),
     sa.Column('role_id', sa.Integer(), nullable=True),
     sa.Column('password_hash', sa.String(length=128), nullable=True),
+    sa.Column('confirmed', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
     sa.PrimaryKeyConstraint('user_id')
     )
@@ -58,6 +64,9 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_users_user_email'))
 
     op.drop_table('users')
+    with op.batch_alter_table('roles', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_roles_default'))
+
     op.drop_table('roles')
     op.drop_table('products')
     # ### end Alembic commands ###

@@ -39,7 +39,7 @@ def registration():
             gen = True
         user = User(user_name=form.name.data, user_surname=form.surname.data, user_gender=gen, user_email=form.email.data)
         db.session.add(user)
-        user.set_password(form.password.data)
+        user.set_password = form.password.data
         db.session.commit()
         token = user.generate_confirmation_token()
         send_confirm(user, token)
