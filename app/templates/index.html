@@ -1,11 +1,85 @@
 
 {% extends 'baseTemplate.html' %}
 {% block content %}
-    <div style="height: 300px; text-align: center;">
-        {% if user %}
-        <h1>Hello, {{ user.username }}</h1>
-        {% else %}
-        <h1>Hello, Stranger</h1>
-        {% endif %}
-   </div>
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+      <div class="carousel-inner mx-3 my-4">
+          {% for prod in product_carousel %}
+            <a class="text-decoration-none text-danger" href="{{ url_for("main.show_product", id_product=prod.Product.prod_article) }}">
+                <div class="carousel-item {% if product_carousel.index(prod)==0 %} active {% endif %}" data-bs-interval="10000">
+                    <img src="{{ prod.Product.prod_photo }}" class="d-block w-75" style="object-fit: contain; height:60vh" alt="...">
+                    <div class="carousel-caption d-none d-md-block text-danger" style="position:absolute;top:0px; right:0px;">
+                        <h1>{{ prod.Product.prod_name }}</h1>
+                        <a class="text-decoration-none text-danger" href="{{ url_for('main.show_all_products', id_category=prod.Product.cat_id) }}">{{ prod.Category.cat_name}}</a>
+                  </div>
+                </div>
+            </a>
+          {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"  data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Предыдущий</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"  data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Следующий</span>
+      </button>
+    </div>
+
+    <section>
+        <div class="container py-5">
+        <div class="row d-flex justify-content-center">
+                {% for cat in categories %}
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="card text-white">
+                            <a href="{{ url_for('main.show_all_products', id_category=cat.id) }}">
+                              <img src="{{ cat.cat_photo}}" class="card-img" alt="{{ cat.cat_name }}"/>
+                            </a>
+                            <div class="card-img-overlay">
+                                <h1 class="card-title"><a class="text-decoration-none link-light" href="{{ url_for('main.show_all_products', id_category=cat.id) }}">{{ cat.cat_name }}</a></h1>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+        </div>
+    </section>
+
+    <section>
+      <h2 class="text-center">Товары со скидкой</h2>
+      <div class="container py-5">
+        <div class="row">
+             {% for prod in best_products %}
+                <div class="col-md-6 col-lg-4 mb-4 mb-md-0">
+                    <div class="card mb-4">
+                      <div class="d-flex justify-content-between p-3">
+                          <p class="lead mb-0"><a class="text-decoration-none link-dark"
+                                                  href="{{ url_for('main.show_product',id_product=prod.Product.prod_article) }}">{{ prod.Product.prod_name }}</a></p>
+                      </div>
+                     <div class="">
+                         <a class="text-decoration-none link-dark" href="{{ url_for('main.show_product',id_product=prod.prod_article) }}">
+                      <img src="{{ prod.Product.prod_photo }}"
+                        class="card-img-top " style="object-fit: contain; height: 20vw;" alt="товар" />
+                         </a>
+                     </div>
+                      <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                          <p class="small"><a href="{{ url_for('main.show_all_products', id_category=prod.Product.cat_id)}}"
+                                              class="text-muted">{{ prod.Category.cat_name}}</a></p>
+                          <p class="small text-danger"><s>{{ prod.Product.prod_old_price }} ₽</s></p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                                  <a class='btn btn-dark' href="{{ url_for('main.show_product',id_product=prod.Product.prod_article) }}">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                      </svg>
+                                  </a>
+                          <h5 class="text-dark mb-0">{{ prod.Product.prod_price }} ₽</h5>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              {% endfor %}
+        </div>
+      </div>
+    </section>
 {% endblock %}

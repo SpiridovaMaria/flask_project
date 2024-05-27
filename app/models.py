@@ -78,7 +78,7 @@ class User(db.Model,UserMixin):
             if self.user_email=="spiridonovaemailforhomework@gmail.com":
                 self.role = Role.query.filter_by(name="Admin").first()
             if self.role is None:
-                self.role = Role.query.filter_by(default = True).first()
+                self.role = Role.query.filter_by(default=True).first()
 
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)
@@ -88,9 +88,9 @@ class User(db.Model,UserMixin):
 
     def generate_confirmation_token(self):
         jws = JsonWebSignature()
-        protected = {'alg':'HS256'}
+        protected = {'alg': 'HS256'}
         payload = self.user_id
-        secret='secret'
+        secret = 'secret'
         return jws.serialize_compact(protected, payload, secret)
 
     def confirm(self,token):
@@ -103,36 +103,112 @@ class User(db.Model,UserMixin):
             self.confirmed = True
             db.session.add(self)
             return True
+
     @property
     def password(self):
         raise AttributeError('Password not enable to read')
 
     @password.setter
     def set_password(self,password):
-        self.password_hash = generate_password_hash(password,method="pbkdf2:sha256")
+        self.password_hash = generate_password_hash(password, method="pbkdf2:sha256")
+
     def password_verify(self,password):
         return check_password_hash(self.password_hash, password)
+
     def __repr__(self):
         return '<User %r>' % self.user_name
+
     def get_id(self):
         return (self.user_id)
+
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, perm):
         return False
+
     def is_admin(self):
         return False
+
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    cat_name = db.Column(db.String(50), unique=True)
+    prod = db.relationship('Product', backref='cat', lazy="dynamic")
+    cat_photo = db.Column(db.String(1000))
+
 
 class Product(db.Model):
     __tablename__ = 'products'
     prod_article = db.Column(db.String(50), primary_key=True)
     prod_name = db.Column(db.String(100))
-    prod_category = db.Column(db.String(100))
-    prod_description = db.Column(db.String(200))
+    cat_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    prod_description = db.Column(db.Text)
     in_stock = db.Column(db.Boolean)
-    prod_price = db.Column(db.Float)
+    prod_old_price = db.Column(db.Numeric)
+    prod_price = db.Column(db.Numeric)
+    prod_color = db.Column(db.String(100))
+    prod_material = db.Column(db.String(200))
+    prod_country = db.Column(db.String(100))
+    prod_photo = db.Column(db.String(1000))
+    in_carousel = db.Column(db.Boolean)
+    sale = db.Column(db.Boolean)
+    sizes = db.relationship('Size_in_stock', backref='sizes', lazy="dynamic")
+    baskets = db.relationship('Basket', backref='in_basket', lazy="dynamic")
+
+class Basket(db.Model):
+    __tablename__ = 'baskets'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    prod_id = db.Column(db.String(50), db.ForeignKey('products.prod_article'))
+    quantity = db.Column(db.Integer)
+    size = db.Column(db.Integer, db.ForeignKey('sizes_in_stock.id'))
+
+
     def __repr__(self):
-        return '<Product %r>' % self.prod_name
+        return '<Basket %r>' % self.user_id + self.prod_id
+
+    def add_product(self, id_product):
+        self.quantity += 1
+        db.session.add(self)
+        return True
+
+    def remove_product(self, id_product):
+        self.quantity -= 1
+        db.session.add(self)
+        return True
+
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    prod_id = db.Column(db.String(50), db.ForeignKey('products.prod_article'))
+    size = db.Column(db.Integer, db.ForeignKey('sizes_in_stock.id'))
+    quantity = db.Column(db.Integer)
+    total_price = db.Column(db.Numeric)
+    address = db.Column(db.Integer, db.ForeignKey('departments.id'))
+
+    def __repr__(self):
+        return '<Order %r>' % self.id
+
+class Department(db.Model):
+    __tablename__ = 'departments'
+    id = db.Column(db.Integer, primary_key=True)
+    address = db.Column(db.String(1000))
+
+    def __repr__(self):
+        return '<Department %r>' % self.address
+
+class Size_in_stock(db.Model):
+    __tablename__ = 'sizes_in_stock'
+    id = db.Column(db.Integer, primary_key=True)
+    prod_id = db.Column(db.String(50), db.ForeignKey('products.prod_article'))
+    size = db.Column(db.Numeric)
+
+
+    def __repr__(self):
+        return '<Size_in_stock %r>' % self.size
 
 
 @login_manager.user_loader

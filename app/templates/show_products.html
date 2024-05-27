@@ -1,0 +1,41 @@
+{% extends 'baseTemplate.html' %}
+{% block content %}
+    <h2 class="mt-3 text-center">Категория: {{ category[-1].cat_name }} </h2>
+    <section>
+    <div class="container py-5">
+        <div class="row">
+             {% for prod in products %}
+                <div class="col-md-6 col-lg-4 mb-4 mb-md-0">
+                    <div class="card mb-4">
+                      <div class="d-flex justify-content-between p-3">
+                          <p class="lead mb-0"><a class="text-decoration-none link-dark" href="{{ url_for('main.show_product',id_product=prod.prod_article) }}">{{ prod.prod_name }}</a></p>
+                      </div>
+                     <div class="">
+                         <a class="text-decoration-none link-dark" href="{{ url_for('main.show_product',id_product=prod.prod_article) }}">
+                              <img src="{{ prod.prod_photo }}"
+                                class="card-img-top " style="object-fit: contain; height: 20vw;" alt="товар" />
+                         </a>
+                     </div>
+                      <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            {% for cat in category if prod.cat_id == cat.id %}
+                              <p class="small"><a href="{{ url_for('main.show_all_products', id_category=cat.id)}}" class="text-muted">{{ cat.cat_name}}</a></p>
+                            {% endfor %}
+                            <p class="small text-danger"><s>{{ prod.prod_old_price }} ₽</s></p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                          <a class='btn btn-dark' href="{{ url_for('main.show_product',id_product=prod.prod_article) }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                              </svg>
+                          </a>
+                          <h5 class="text-dark mb-0">{{ prod.prod_price }} ₽</h5>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+             {% endfor %}
+        </div>
+      </div>
+    </section>
+{% endblock %}

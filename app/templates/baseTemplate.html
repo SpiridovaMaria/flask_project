@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% from 'bootstrap5/form.html' import render_form %}
     {{ bootstrap.load_css() }}
     {{ bootstrap.load_js() }}
     {% block title %}
@@ -17,28 +18,24 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">New products</a>
+          <a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">Главная</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Categories
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Категории
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Men</a></li>
-            <li><a class="dropdown-item" href="#">Women</a></li>
-            <li><a class="dropdown-item">Boys</a></li>
-            <li><a class="dropdown-item" href="#">Girls</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('main.show_all_products',id_category=1) }}">мужчины</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('main.show_all_products',id_category=2) }}">женщины</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('main.show_all_products',id_category=3) }}">мальчики</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('main.show_all_products',id_category=4) }}">девочки</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('main.show_all_products',id_category=6) }}">все</a></li>
           </ul>
         </li>
       </ul>
       <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-dark" type="submit">Search</button>
           {% if current_user.is_authenticated and current_user.confirmed %}
-              <a class="btn btn-dark mx-2 btn-sm" href="{{ url_for('main.showProfile') }}" style="width:200px">Личный кабинет</a>
+              <a class="btn btn-dark mx-2 btn-md" href="{{ url_for('main.showProfile') }}" style="width:200px">Личный кабинет</a>
             <a class = 'btn' href="{{ url_for('auth.logout') }}">
               <svg xmlns="http://www.w3.org/2000/svg" width=40" height="40" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
                 <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
@@ -64,104 +61,43 @@
 {% block content %}
 {% endblock %}
 {% block footer %}
-    <footer class="text-center text-lg-start bg-body-dark text-muted" style="background: #FFE6EB">
-  <!-- Section: Social media -->
-  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom" style="background: #FFD8DF">
-    <!-- Left -->
-    <div class="me-5 d-none d-lg-block">
-      <span>Get connected with us on social networks:</span>
-    </div>
-    <!-- Left -->
-
-    <!-- Right -->
-    <div>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-facebook-f"></i>
-      </a>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-google"></i>
-      </a>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-linkedin"></i>
-      </a>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <!-- Right -->
-  </section>
-  <!-- Section: Social media -->
-
-  <!-- Section: Links  -->
-  <section class="" >
+<footer class="text-center text-lg-start bg-body-dark text-muted pt-3" style="background: #FFE6EB">
+  <section>
     <div class="container text-center text-md-start mt-5">
       <!-- Grid row -->
       <div class="row mt-3">
         <!-- Grid column -->
-        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+        <div class="col-md-4 col-xs-12 mx-auto mb-4">
           <!-- Content -->
           <h6 class="text-uppercase fw-bold mb-4">
-            <i class="fas fa-gem me-3"></i>My shop
+            <i class="fas fa-gem me-3"></i>О нас
           </h6>
           <p>
-            My shop is a brand by people for people. Established in 2024, we have grown into a global label with over 45 stores and 900 people that help us tell our story. Taking inspiration from people’s lives and needs, we strive to create a wardrobe that you will wear for years!
+           My shop - это бренд, созданный людьми для людей. Основанный в 2020 году, мы превратились в глобальную торговую марку с более чем 45 магазинами и 900 сотрудниками, которые помогают нам рассказывать нашу историю. Черпая вдохновение из жизни и потребностей людей, мы стремимся найти идеальную обувь, которую Вы будете носить долгие годы!
           </p>
         </div>
         <!-- Grid column -->
 
         <!-- Grid column -->
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+        <div class="col-md-3 col-xs-6 mx-auto mb-4">
           <!-- Links -->
           <h6 class="text-uppercase fw-bold mb-4">
-            Products
+            Категории
           </h6>
-          <p>
-            <a href="#!" class="text-reset">Men</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Women</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Boys</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Girls</a>
-          </p>
+            <p><a href="{{ url_for('main.show_all_products',id_category=1) }}" class="text-decoration-none" style="color:#212529BF">мужчины</a></p>
+            <p><a href="{{ url_for('main.show_all_products',id_category=2) }}" class="text-decoration-none" style="color:#212529BF">женщины</a></p>
+            <p><a href="{{ url_for('main.show_all_products',id_category=4) }}" class="text-decoration-none" style="color:#212529BF">мальчики</a></p>
+            <p><a href="{{ url_for('main.show_all_products',id_category=3) }}" class="text-decoration-none" style="color:#212529BF">девочки</a></p>
+            <p><a href="{{ url_for('main.show_all_products',id_category=6) }}" class="text-decoration-none" style="color:#212529BF">все</a></p>
+
         </div>
         <!-- Grid column -->
 
         <!-- Grid column -->
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+        <div class="col-md-4 col-lg-2 col-xl-3 mx-auto mb-md-0 mb-4">
           <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">
-            Useful links
-          </h6>
-          <p>
-            <a href="#!" class="text-reset">Delivery</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Settings</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Reviews</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Help</a>
-          </p>
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-          <p><i class="fas fa-home me-3"></i> Moscow, Tverskaya Street, 21</p>
+          <h6 class="text-uppercase fw-bold mb-4">Контакты</h6>
+          <p><i class="fas fa-home me-3"></i> Москва, ул. Тверская, 21 </p>
           <p>
             <i class="fas fa-envelope me-3"></i>
             myshop@gmail.com

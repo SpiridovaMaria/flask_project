@@ -4,8 +4,7 @@
     <div class="header">
         <div class="row r1">
             <div class="col-md-9 abc">
-                <h1>{{ product.prod_name }}</h1>
-                <h3>{{ product.prod_article }}</h3>
+                <h1>{{ product.Product.prod_name }}</h1>
             </div>
         </div>
     </div>
@@ -13,21 +12,26 @@
         <div class="row r3">
             <div class="col-md-5 p-0 klo">
                 <ul class="list-unstyled">
-                    <li class="mb-2">Артикул: {{ product.prod_article }}</li>
-                    <li class="mb-2">Категория товара: {{ product.prod_category }}</li>
-                    <li class="mb-2">Описание: {{ product.prod_description}}</li>
-                    <li class="mb-2">Цена: {{ product.prod_price }} руб.</li>
+                    <li class="mb-2">Артикул: {{ product.Product.prod_article }}</li>
+                    <li class="mb-2">Категория товара: {{ product.Category.cat_name }}</li>
+                    <li class="mb-2">Цвет: {{ product.Product.prod_color}}</li>
+                    <li class="mb-2">Производитель: {{ product.Product.prod_country}}</li>
+                    <li class="mb-2">Материал: {{ product.Product.prod_material}}</li>
+                    <li class="mb-2">Описание: {{ product.Product.prod_description}}</li>
+                     <li class="my-4"><h3>Цена: {{ product.Product.prod_price }} руб.</h3></li>
                 </ul>
             </div>
-            <div class="col-md-7"> <img src="https://m.media-amazon.com/images/I/61+a3iBGiUL._AC_UY1000_.jpg" width="90%" height="95%"> </div>
+            <div class="col-md-7"> <img src="{{ product.Product.prod_photo }}" width="90%" height="95%"> </div>
         </div>
     </div>
-    <div class="footer d-flex flex-column mt-5">
-        <div class="row r3">
-            <div class="col-md-2 myt "><a class="btn btn-dark">Отзывы</a></div>
-            <div class="col-md-2 mio offset-md-4"><a class="btn btn-dark">В корзину</a></div>
-            <div class="col-md-2 myt "><button type="button" class="btn btn-danger"><a>Купить сейяас</a></button></div>
-        </div>
+    <div class="footer d-flex justify-content-end mt-5">
+        {% if size.__len__()>0 or product.Product.in_stock==0 %}
+            <form class="col-lg-3 my-form mt-3" method="post">
+                {{ render_form(form) }}
+            </form>
+        {% else %}
+            <h5 class="text-danger text-center">Товара нет в наличии</h5>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
