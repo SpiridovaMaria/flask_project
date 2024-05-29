@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 class AddToBasketForm(FlaskForm):
     size = SelectField("Размер:", coerce=int, validators=[DataRequired()])
-    submit = SubmitField('В корзину')
+    submit = SubmitField('В корзину', render_kw={'class':'btn-danger'})
 
 class OrderProductForm(FlaskForm):
     department_address = SelectField("Выберите магазин для получения:", render_kw={'style':'outline: none;box-shadow: none;'}, validators=[DataRequired()])

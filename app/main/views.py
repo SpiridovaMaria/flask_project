@@ -27,7 +27,7 @@ admin.add_view(ModelView(Category, db.session))
 @main.route("/index")
 def index():
     """
-        function for main page
+        Function for main page
         it gets list of products that should be in carousel and in sale section and list of categories from models
         :return template of main page
     """
@@ -142,7 +142,7 @@ def delete_product_from_basket(id_product, id_size, quantity):
             :return if current user haven't confirmed his email - redirect to auth.unconfirmed, if product with this id and size doesn't exist
             in the basket - 404 error, elseif the quantity == "all" - it deletes this product from the basket and redirects to showProfile()
             else - it decreases the quantity
-        """
+    """
     user = current_user
     if user.confirmed:
         existed = Basket.query.filter_by(user_id=user.user_id, prod_id=id_product, size=id_size).first()

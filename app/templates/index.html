@@ -2,17 +2,14 @@
 {% extends 'baseTemplate.html' %}
 {% block content %}
     <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-      <div class="carousel-inner mx-3 my-4">
+      <div class="carousel-inner mx-3 my-4 ">
           {% for prod in product_carousel %}
-            <a class="text-decoration-none text-danger" href="{{ url_for("main.show_product", id_product=prod.Product.prod_article) }}">
-                <div class="carousel-item {% if product_carousel.index(prod)==0 %} active {% endif %}" data-bs-interval="10000">
-                    <img src="{{ prod.Product.prod_photo }}" class="d-block w-75" style="object-fit: contain; height:60vh" alt="...">
-                    <div class="carousel-caption d-none d-md-block text-danger" style="position:absolute;top:0px; right:0px;">
-                        <h1>{{ prod.Product.prod_name }}</h1>
-                        <a class="text-decoration-none text-danger" href="{{ url_for('main.show_all_products', id_category=prod.Product.cat_id) }}">{{ prod.Category.cat_name}}</a>
-                  </div>
+                <div class="carousel-item{% if product_carousel.index(prod)==0 %} active {% endif %}" data-bs-interval="10000">
+                    <a class="text-decoration-none align-text-top text-end text-danger d-flex justify-content-between" href="{{ url_for("main.show_product", id_product=prod.Product.prod_article) }}">
+                        <img src="{{ prod.Product.prod_photo }}" class="d-block w-75" style="object-fit: contain; height:60vh" alt="...">
+                         <h1 class="mr-5">{{ prod.Product.prod_name }}</h1>
+                    </a>
                 </div>
-            </a>
           {% endfor %}
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"  data-bs-slide="prev">
